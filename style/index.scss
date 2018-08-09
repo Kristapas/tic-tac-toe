@@ -1,6 +1,7 @@
-@import 'reset';
+@import "reset";
 $green: #195e09;
 $black: #0c0c0c;
+$grey: #e3e9f2;
 body {
   height: 100vh;
   display: flex;
@@ -23,12 +24,17 @@ body {
       }
       .box {
         border-right: 1px solid $black;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        font-size: 44px;
         flex: 1;
+        cursor: pointer;
         &:last-child {
           border-right: none;
         }
         &:hover {
-          background: $green;
+          background: $grey;
         }
       }
     }
