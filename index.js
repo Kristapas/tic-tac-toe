@@ -1,5 +1,49 @@
 (function IIFE() {
-
+  const combos = [
+    //row combos
+    [
+      [0, 0],
+      [0, 1],
+      [0, 2]
+    ],
+    [
+      [1, 0],
+      [1, 1],
+      [1, 2]
+    ],
+    [
+      [2, 0],
+      [2, 1],
+      [2, 2]
+    ],
+    // columns combos
+    [
+      [0, 0],
+      [1, 0],
+      [2, 0]
+    ],
+    [
+      [0, 1],
+      [1, 1],
+      [2, 1]
+    ],
+    [
+      [0, 2],
+      [1, 2],
+      [2, 2]
+    ],
+    // istrizaines 
+    [
+      [0, 0],
+      [1, 1],
+      [2, 2]
+    ],
+    [
+      [0, 2],
+      [1, 1],
+      [2, 0]
+    ],
+  ];
   const gameData = [...Array(3)].map(item => [...Array(3)]);
 
   //sukuriu array 3dydzio ir dar jame tris arrays rezultate vienas array kuriu viduje yra 3array 
@@ -8,7 +52,9 @@
 
   const cross = '😈';
   const circle = '😇';
+  let winner = 0;
   let turn = 0;
+
 
   const create = ({
     tag,
@@ -23,10 +69,30 @@
 
     return element;
   }
+
+  const checkWinner = () => {
+
+    const currentChar = turn % 2 === 0 ? cross : circle;
+    const isWinner = combos.some(combo =>
+      combo.every(([row, box]) => gameData[row][box] === currentChar));
+    winner = isWinner ? currentChar : null;
+
+  };
+
+
+
+
   const addGameData = (row, box) => {
     gameData[row][box] = turn % 2 === 0 ? cross : circle;
-    turn = turn + 1;
+    checkWinner();
+
+    if (!winner) {
+      turn = turn + 1;
+
+    }
+
     render();
+
   };
 
   const clearApp = () => {
@@ -48,13 +114,13 @@
       // const row = document.createElement('div');
       // row.classList.add('row');
       rowData.forEach((boxData, boxIndex) => {
-        const hasValue = !!gameData[rowIndex][boxIndex];
+        const allowClick = !!gameData[rowIndex][boxIndex] || !!winner;
         const box = create({
           tag: 'div',
           classList: 'box',
           textContent: boxData,
           events: {
-            click: () => (hasValue ?
+            click: () => (allowClick ?
               null :
               addGameData(rowIndex, boxIndex))
           },
