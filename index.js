@@ -8,6 +8,7 @@
 
   const cross = '😈';
   const circle = '😇';
+  let turn = 0;
 
   const create = ({
     tag,
@@ -23,7 +24,8 @@
     return element;
   }
   const addGameData = (row, box) => {
-    gameData[row][box] = cross;
+    gameData[row][box] = turn % 2 === 0 ? cross : circle;
+    turn = turn + 1;
     render();
   };
 
@@ -46,12 +48,15 @@
       // const row = document.createElement('div');
       // row.classList.add('row');
       rowData.forEach((boxData, boxIndex) => {
+        const hasValue = !!gameData[rowIndex][boxIndex];
         const box = create({
           tag: 'div',
           classList: 'box',
           textContent: boxData,
           events: {
-            click: () => addGameData(rowIndex, boxIndex)
+            click: () => (hasValue ?
+              null :
+              addGameData(rowIndex, boxIndex))
           },
 
         });
@@ -68,14 +73,14 @@
   };
   // jei norim uzvardinti kitaip o ne target tiesiog const start = ({target: element }) ir kitur jau 
   // keiciam visur kur reikia target i element
-  const start = ({
-    target
-  }) => {
-    // alert('Lests Start');
-    // console.log('event', target);
-    clearApp();
-    render();
-  };
+  // const start = ({
+  //   target
+  // }) => {
+  //   // alert('Lests Start');
+  //   // console.log('event', target);
+
+  //   render();
+  // };
 
   const initApp = () => {
     const startButton = create({
@@ -83,7 +88,7 @@
       classList: 'primary-button',
       textContent: 'Start',
       events: {
-        click: start,
+        click: render,
       }
     });
     // const startButton = document.createElement('button');
